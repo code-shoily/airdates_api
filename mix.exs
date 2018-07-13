@@ -22,7 +22,7 @@ defmodule AirdatesApi.MixProject do
   defp deps do
     [
       {:floki, "~> 0.20.0"},
-      {:httpotion, "~> 3.1.0"}
+      {:tesla, "~> 1.0.0"}
     ]
   end
 end

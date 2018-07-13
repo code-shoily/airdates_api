@@ -21,7 +21,8 @@ defmodule AirdatesApi.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:floki, "~> 0.20.0"}
+      {:floki, "~> 0.20.0"},
+      {:httpotion, "~> 3.1.0"}
     ]
   end
 end

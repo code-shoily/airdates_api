@@ -1,4 +1,4 @@
-defmodule AirdatesApi.Helpers do
+defmodule AirdatesApi.Fetcher do
   @moduledoc """
   Contains functions for helper functions.
   """

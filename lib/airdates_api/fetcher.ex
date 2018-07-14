@@ -5,11 +5,6 @@ defmodule AirdatesApi.Fetcher do
   alias AirdatesApi.Client
 
   def curl() do
-    try do
-      Client.get_airdates()
-      |> :zlib.gunzip()
-    rescue
-      ArgumentError -> nil
-    end
+    Client.get_airdates()
   end
 end

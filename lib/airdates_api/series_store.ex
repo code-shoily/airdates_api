@@ -23,8 +23,8 @@ defmodule AirdatesApi.SeriesStore do
     GenServer.call(pid, {:find_by_date, date})
   end
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, :ok, [])
+  def start_link(opts) do
+    GenServer.start_link(__MODULE__, :ok, opts)
   end
 
   @impl true
@@ -51,10 +51,11 @@ defmodule AirdatesApi.SeriesStore do
 
   @impl true
   def handle_call(:empty?, _from, state) do
-    case state do
-      %{by_date: %{}, by_title: %{}} -> true
-      _ -> false
-    end
+    {:reply,
+     case state do
+       %{by_date: %{}, by_title: %{}} -> true
+       _ -> false
+     end, state}
   end
 
   @impl true

@@ -23,7 +23,7 @@ defmodule AirdatesApi.SeriesStore do
     GenServer.call(pid, {:find_by_date, date})
   end
 
-  def start_link() do
+  def start_link(_) do
     GenServer.start_link(__MODULE__, :ok, [])
   end
 

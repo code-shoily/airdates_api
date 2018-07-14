@@ -7,6 +7,10 @@ defmodule AirdatesApi.SeriesStore do
     GenServer.cast(pid, {:add, line})
   end
 
+  def empty?(pid) do
+    GenServer.call(pid, :empty?)
+  end
+
   def show_all(pid) do
     GenServer.call(pid, :show_all)
   end
@@ -43,6 +47,14 @@ defmodule AirdatesApi.SeriesStore do
   @impl true
   def handle_call(:show_all, _from, state) do
     {:reply, state, state}
+  end
+
+  @impl true
+  def handle_call(:empty?, _from, state) do
+    case state do
+      %{by_date: %{}, by_title: %{}} -> true
+      _ -> false
+    end
   end
 
   @impl true

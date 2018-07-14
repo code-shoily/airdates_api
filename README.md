@@ -2,7 +2,14 @@
 
 A simple program that fetches the data from [airdates.tv](http://airdates.tv), parses the data and puts it in a GraphQL queriable format.
 
-# TODO List coming soon.
+# TODO
+
+- Parse Season/Episode from title 
+- GenServer to store all the fetched data
+- GraphQL API to query the data from GenServer
+- graphiql to interface with the API
+- [Optional] Persist to database
+- [Optional] Add favorite shows/set alarms
 
 ## Installation
 

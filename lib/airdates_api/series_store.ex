@@ -7,12 +7,20 @@ defmodule AirdatesApi.SeriesStore do
     GenServer.cast(pid, {:add, line})
   end
 
+  def show_all(pid) do
+    GenServer.call(pid, :show_all)
+  end
+
   def find_by_title(pid, title) do
     GenServer.call(pid, {:find_by_title, title})
   end
 
   def find_by_date(pid, date) do
     GenServer.call(pid, {:find_by_date, date})
+  end
+
+  def start_link() do
+    GenServer.start_link(__MODULE__, :ok, [])
   end
 
   @impl true
@@ -33,7 +41,12 @@ defmodule AirdatesApi.SeriesStore do
   end
 
   @impl true
-  def handle_cast({:add, [id: _, date: date, slug: slug, title: _] = line}, state) do
+  def handle_call(:show_all, _from, state) do
+    {:reply, state, state}
+  end
+
+  @impl true
+  def handle_cast({:add, [id: _, date: date, title: _, slug: slug] = line}, state) do
     {:noreply,
      %{
        by_date:

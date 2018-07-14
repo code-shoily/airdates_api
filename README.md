@@ -1,6 +1,8 @@
 # AirdatesApi
 
-**TODO: Add description**
+A simple program that fetches the data from [airdates.tv](http://airdates.tv), parses the data and puts it in a GraphQL queriable format.
+
+# TODO List coming soon.
 
 ## Installation
 

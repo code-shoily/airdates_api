@@ -1,7 +1,9 @@
 defmodule AirdatesApi.SeriesStore do
   use GenServer
 
-  def add(pid, [id: _, date: _, title: _] = line) do
+  @type show_line :: [id: binary(), date: binary(), title: binary(), slug: binary()]
+
+  def add(pid, [id: _, date: _, title: _, slug: _] = line) do
     GenServer.cast(pid, {:add, line})
   end
 
@@ -20,11 +22,13 @@ defmodule AirdatesApi.SeriesStore do
 
   @impl true
   def handle_call({:find_by_title, _title}, _from, state) do
+    # TODO NOT_IMPLEMENTED
     {:reply, state, state}
   end
 
   @impl true
   def handle_call({:find_by_date, _date}, _from, state) do
+    # TODO NOT_IMPLEMENTED
     {:reply, state, state}
   end
 

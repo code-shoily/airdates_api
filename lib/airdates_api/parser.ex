@@ -1,5 +1,5 @@
 defmodule AirdatesApi.Parser do
-  @type show_line :: [id: binary(), date: binary(), title: binary()]
+  @type show_line :: [id: binary(), date: binary(), slug: binary(), title: binary()]
 
   @doc """
   Fetch data from website and parses it.
@@ -16,8 +16,9 @@ defmodule AirdatesApi.Parser do
   defp parse_line({_, [_, {"data-date", date}], data}) do
     data
     |> Enum.map(fn
-      {_, [{_, "entry"}, {"data-series-id", series_id}, _], [{_, [{_, "title"}], [title]}]} ->
-        dispatch(date, series_id, title)
+      {_, [{_, "entry"}, {"data-series-id", series_id}, {"data-series-source", slug}],
+       [{_, [{_, "title"}], [title]}]} ->
+        dispatch(date, series_id, slug, title)
 
       _ ->
         nil
@@ -25,9 +26,9 @@ defmodule AirdatesApi.Parser do
     |> Enum.filter(& &1)
   end
 
-  @spec dispatch(binary(), binary(), binary()) :: show_line
-  defp dispatch(date, id, title) do
+  @spec dispatch(binary(), binary(), binary(), binary()) :: show_line
+  defp dispatch(date, id, slug, title) do
     # # TODO Send this to the GenServer Store
-    [id: id, date: date, title: title]
+    [id: id, date: date, slug: slug, title: title]
   end
 end

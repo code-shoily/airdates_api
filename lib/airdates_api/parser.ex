@@ -13,9 +13,8 @@ defmodule AirdatesApi.Parser do
   defp parse_line({_, [_, {"data-date", date}], data}) do
     data
     |> Enum.map(fn
-      {_, [{_, "entry"}, {"data-series-id", series_id}, {"data-series-source", source}],
-       [{_, [{_, "title"}], [title]}]} ->
-        dispatch(date, series_id, source, title)
+      {_, [{_, "entry"}, {"data-series-id", series_id}, _], [{_, [{_, "title"}], [title]}]} ->
+        dispatch(date, series_id, title)
 
       _ ->
         nil
@@ -23,8 +22,8 @@ defmodule AirdatesApi.Parser do
     |> Enum.filter(& &1)
   end
 
-  defp dispatch(date, series_id, source, title) do
-    # TODO Send this to the GenServer Store
-    {series_id, date, source, title}
+  defp dispatch(date, id, title) do
+    # # TODO Send this to the GenServer Store
+    [id: id, date: date, title: title]
   end
 end

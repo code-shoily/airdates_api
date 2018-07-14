@@ -27,7 +27,10 @@ defmodule AirdatesApi.MixProject do
       {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.18.0", only: :dev, runtime: false},
       {:cowboy, "~> 2.0"},
-      {:plug, "~> 1.0"}
+      {:plug, "~> 1.0"},
+      {:absinthe, "~> 1.4.0"},
+      {:absinthe_plug, "~> 1.4.0"},
+      {:poison, "~> 1.3.0"}
     ]
   end
 end

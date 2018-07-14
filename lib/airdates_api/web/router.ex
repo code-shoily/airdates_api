@@ -1,14 +1,22 @@
 defmodule AirdatesApi.Web.Router do
   use Plug.Router
 
+  plug(
+    Plug.Parsers,
+    parsers: [:urlencoded, :multipart, :json, Absinthe.Plug.Parser],
+    pass: ["*/*"],
+    json_decoder: Poison
+  )
+
   plug(:match)
   plug(:dispatch)
 
-  get "/" do
-    send_resp(conn, 200, "<the graphiql should appear here>")
-  end
-
-  match _ do
-    send_resp(conn, 404, "404")
-  end
+  forward(
+    "/",
+    to: Absinthe.Plug.GraphiQL,
+    init_opts: [
+      schema: AirdatesApi.Web.Schema,
+      interface: :playground
+    ]
+  )
 end

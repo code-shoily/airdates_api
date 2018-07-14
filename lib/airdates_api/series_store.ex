@@ -29,7 +29,7 @@ defmodule AirdatesApi.SeriesStore do
   end
 
   @impl true
-  def handle_cast({:add, [id: _, date: date, title: title] = line}, state) do
+  def handle_cast({:add, [id: _, date: date, slug: slug, title: _] = line}, state) do
     {:noreply,
      %{
        by_date:
@@ -40,7 +40,7 @@ defmodule AirdatesApi.SeriesStore do
        by_title:
          state
          |> Map.get(:by_title)
-         |> Map.get(title, [])
+         |> Map.get(slug, [])
          |> Kernel.++(line)
      }}
   end

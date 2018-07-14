@@ -22,7 +22,8 @@ defmodule AirdatesApi.MixProject do
   defp deps do
     [
       {:floki, "~> 0.20.0"},
-      {:tesla, "~> 1.0.0"}
+      {:tesla, "~> 1.0.0"},
+      {:credo, "~> 0.9.1", only: [:dev, :test], runtime: false}
     ]
   end
 end

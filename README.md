@@ -11,20 +11,15 @@ A simple program that fetches the data from [airdates.tv](http://airdates.tv), p
 - [Optional] Persist to database
 - [Optional] Add favorite shows/set alarms
 
-## Installation
+## How to Run
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `airdates_api` to your list of dependencies in `mix.exs`:
+### Graphiql (WIP)
 
-```elixir
-def deps do
-  [
-    {:airdates_api, "~> 0.1.0"}
-  ]
-end
-```
+- Clone this repository
+- `mix run --no-halt`
+- Go to `http://localhost:4001/`
+- Interact with Graphiql
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/airdates_api](https://hexdocs.pm/airdates_api).
+### Data API
 
+[TODO]

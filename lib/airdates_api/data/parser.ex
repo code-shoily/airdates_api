@@ -7,6 +7,10 @@ defmodule AirdatesApi.Parser do
            title: binary()
          }
 
+  defp format_date(<<year::bytes-size(4), month::bytes-size(2), day::bytes-size(2)>>) do
+    "#{year}-#{month}-#{day}"
+  end
+
   @doc """
   Fetch data from website and parses it.
   """
@@ -29,7 +33,7 @@ defmodule AirdatesApi.Parser do
         %{
           id: UUID.uuid4(),
           series_id: series_id,
-          date: date,
+          date: format_date(date),
           description: description,
           title: title
         }

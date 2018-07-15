@@ -19,7 +19,7 @@ defmodule AirdatesApi.Web.Schema do
         description: "The title of the show, can be used together with 'episode'"
       )
 
-      arg(:date, :string, description: "The date of the show, in YYYYMMDD format")
+      arg(:date, :string, description: "The date of the show, in YYYY-MM-DD format")
       arg(:episode, :string, description: "Episode in SXXEXX format")
 
       arg(

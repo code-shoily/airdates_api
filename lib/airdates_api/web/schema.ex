@@ -21,7 +21,13 @@ defmodule AirdatesApi.Web.Schema do
 
       arg(:date, :string, description: "The date of the show, in YYYYMMDD format")
       arg(:episode, :string, description: "Episode in SXXEXX format")
-      arg(:sort_by, :string, description: "Either 'title' or 'date', sort field for show list")
+
+      arg(
+        :sort_by,
+        :sort_fields,
+        description: "Whether to sort by date or title"
+      )
+
       resolve(&Resolvers.series/3)
     end
   end

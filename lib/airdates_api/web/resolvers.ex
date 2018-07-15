@@ -22,11 +22,7 @@ defmodule AirdatesApi.Web.Resolvers do
         {:ok, Store.find_by_date(:store, args[:date])}
 
       {nil, [:sort_by]} ->
-        case args[:sort_by] do
-          "title" -> {:ok, Store.list(:store, sort: :title)}
-          "date" -> {:ok, Store.list(:store, sort: :date)}
-          _ -> {:error, "Invalid :sort value, user 'title' or 'date' only"}
-        end
+        {:ok, Store.list(:store, sort: arg[:sort_by])}
 
       {_, [_]} ->
         {:error, "Episode should only be used with title"}

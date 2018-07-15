@@ -1,77 +1,145 @@
 defmodule AirdatesApi.SeriesStore do
   use GenServer
 
-  @type show_line :: [id: binary(), date: binary(), title: binary(), slug: binary()]
+  # --------------------------------------------------
+  # PUBLIC API
+  # --------------------------------------------------
+  def start_link(opts) do
+    GenServer.start_link(__MODULE__, :ok, opts)
+  end
 
-  def add(pid, [id: _, date: _, title: _, slug: _] = line) do
-    GenServer.cast(pid, {:add, line})
+  def reload(pid) do
+    GenServer.call(pid, :reload)
   end
 
   def empty?(pid) do
     GenServer.call(pid, :empty?)
   end
 
-  def show_all(pid) do
-    GenServer.call(pid, :show_all)
+  def list(pid, opts \\ []) do
+    GenServer.call(
+      pid,
+      {:list,
+       case opts do
+         [sort: attr] when attr in [:title, :date] -> attr
+         _ -> :date
+       end}
+    )
+  end
+
+  def find_by_id(pid, id) do
+    GenServer.call(pid, {:find, :id, id})
+  end
+
+  def find_by_series_id(pid, series_id) do
+    GenServer.call(pid, {:find, :series_id, series_id})
   end
 
   def find_by_title(pid, title) do
-    GenServer.call(pid, {:find_by_title, title})
+    GenServer.call(pid, {:find, :title, title})
+  end
+
+  def find_by_title(pid, title, episode) do
+    case episode do
+      nil -> GenServer.call(pid, {:find, :title, title})
+      _ -> GenServer.call(pid, {:find, :title_and_episode, title, episode})
+    end
   end
 
   def find_by_date(pid, date) do
-    GenServer.call(pid, {:find_by_date, date})
+    GenServer.call(pid, {:find, :date, date})
   end
 
-  def start_link(opts) do
-    GenServer.start_link(__MODULE__, :ok, opts)
-  end
-
+  # --------------------------------------------------
+  # GENSERVER CALLBACKS
+  # --------------------------------------------------
   @impl true
   def init(_) do
-    {:ok, %{by_date: %{}, by_title: %{}}}
+    {:ok, AirdatesApi.Parser.parse()}
   end
 
   @impl true
-  def handle_call({:find_by_title, _title}, _from, state) do
-    # TODO NOT_IMPLEMENTED
-    {:reply, state, state}
+  def handle_call({:find, :series_id, series_id}, _from, state) do
+    {:reply,
+     state
+     |> Enum.filter(fn %{series_id: series_id_} ->
+       series_id_ == series_id
+     end), state}
   end
 
   @impl true
-  def handle_call({:find_by_date, _date}, _from, state) do
-    # TODO NOT_IMPLEMENTED
-    {:reply, state, state}
+  def handle_call({:find, :id, id}, _from, state) do
+    {:reply,
+     state
+     |> Enum.filter(fn %{id: id_} ->
+       id_ == id
+     end)
+     |> hd(), state}
   end
 
   @impl true
-  def handle_call(:show_all, _from, state) do
-    {:reply, state, state}
+  def handle_call({:find, :title, title}, _from, state) do
+    {:reply,
+     state
+     |> Enum.filter(fn %{title: title_} ->
+       title_
+       |> String.downcase()
+       |> String.starts_with?(
+         title
+         |> String.downcase()
+       )
+     end)
+     |> Enum.sort_by(& &1[:title]), state}
+  end
+
+  @impl true
+  def handle_call({:find, :title_and_episode, title, episode}, _from, state) do
+    {:reply,
+     state
+     |> Enum.filter(fn %{title: title_} ->
+       title_
+       |> String.downcase()
+       |> String.starts_with?(
+         title
+         |> String.downcase()
+       )
+     end)
+     |> Enum.filter(fn %{title: title_} ->
+       title_
+       |> String.downcase()
+       |> String.ends_with?(
+         episode
+         |> String.downcase()
+       )
+     end)
+     |> Enum.sort_by(& &1[:title]), state}
+  end
+
+  @impl true
+  def handle_call({:find, :date, date}, _from, state) do
+    {:reply,
+     state
+     |> Enum.filter(fn %{date: date_} -> date_ == date end)
+     |> Enum.sort_by(& &1[:date]), state}
+  end
+
+  @impl true
+  def handle_call({:list, attr}, _from, state) do
+    {:reply, state |> Enum.sort_by(& &1[attr]), state}
   end
 
   @impl true
   def handle_call(:empty?, _from, state) do
     {:reply,
      case state do
-       %{by_date: %{}, by_title: %{}} -> true
+       [] -> true
        _ -> false
      end, state}
   end
 
   @impl true
-  def handle_cast({:add, [id: _, date: date, title: _, slug: slug] = line}, state) do
-    {:noreply,
-     %{
-       by_date:
-         state
-         |> Map.get(:by_date)
-         |> Map.get(date, [])
-         |> Kernel.++(line),
-       by_title:
-         state
-         |> Map.get(:by_title)
-         |> Map.get(slug, [])
-         |> Kernel.++(line)
-     }}
+  def handle_call(:reload, _from, _state) do
+    state = AirdatesApi.Parser.parse()
+    {:reply, state, state}
   end
 end

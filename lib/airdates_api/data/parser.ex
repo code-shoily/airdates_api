@@ -3,7 +3,7 @@ defmodule AirdatesApi.Parser do
           id: binary(),
           series_id: binary(),
           date: binary(),
-          slug: binary(),
+          description: binary(),
           title: binary()
         }
 
@@ -24,9 +24,9 @@ defmodule AirdatesApi.Parser do
   defp parse_line({_, [_, {"data-date", date}], data}) do
     data
     |> Enum.map(fn
-      {_, [{_, "entry"}, {"data-series-id", series_id}, {"data-series-source", slug}],
+      {_, [{_, "entry"}, {"data-series-id", series_id}, {"data-series-source", description}],
        [{_, [{_, "title"}], [title]}]} ->
-        dispatch(date, UUID.uuid4(), series_id, slug, title)
+        dispatch(date, UUID.uuid4(), series_id, description, title)
 
       _ ->
         nil
@@ -35,7 +35,7 @@ defmodule AirdatesApi.Parser do
   end
 
   @spec dispatch(binary(), binary(), binary(), binary(), binary()) :: show_line
-  defp dispatch(date, id, series_id, slug, title) do
-    %{id: id, series_id: series_id, date: date, slug: slug, title: title}
+  defp dispatch(date, id, series_id, description, title) do
+    %{id: id, series_id: series_id, date: date, description: description, title: title}
   end
 end

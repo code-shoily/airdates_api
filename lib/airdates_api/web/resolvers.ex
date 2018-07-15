@@ -1,6 +1,11 @@
 defmodule AirdatesApi.Web.Resolvers do
   alias AirdatesApi.SeriesStore, as: Store
 
+  @spec valid_episode?(String.t()) :: boolean()
+  defp valid_episode?(episode) do
+    Regex.match?(~r/S\d{2}E\d{2}/i, episode)
+  end
+
   @spec series(any(), map(), any()) :: {:ok, any()} | {:error, any()}
   def series(_, args, _) do
     {episode, arg} = Map.pop(args, :episode)
@@ -9,8 +14,15 @@ defmodule AirdatesApi.Web.Resolvers do
       {nil, []} ->
         {:ok, Store.list(:store)}
 
-      {_, [:title]} ->
+      {nil, [:title]} ->
         {:ok, Store.find_by_title(:store, arg[:title], episode)}
+
+      {_, [:title]} ->
+        unless valid_episode?(episode) do
+          {:error, "Please enter an episode name in SXXEXX format where X is a digit"}
+        else
+          {:ok, Store.find_by_title(:store, arg[:title], episode)}
+        end
 
       {nil, [:id]} ->
         {:ok, Store.find_by_id(:store, args[:id])}

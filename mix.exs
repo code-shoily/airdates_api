@@ -30,7 +30,8 @@ defmodule AirdatesApi.MixProject do
       {:plug, "~> 1.0"},
       {:absinthe, "~> 1.4.0"},
       {:absinthe_plug, "~> 1.4.0"},
-      {:poison, "~> 1.3.0"}
+      {:poison, "~> 1.3.0"},
+      {:elixir_uuid, "~> 1.2"}
     ]
   end
 end

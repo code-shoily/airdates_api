@@ -6,7 +6,7 @@ defmodule AirdatesApi do
 
   def start(_type, _args) do
     children = [
-      {AirdatesApi.SeriesStore, name: AirdatesApi.SeriesStore},
+      {AirdatesApi.SeriesStore, name: :store},
       Plug.Adapters.Cowboy2.child_spec(
         scheme: :http,
         plug: AirdatesApi.Web.Router,

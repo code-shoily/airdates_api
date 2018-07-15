@@ -6,6 +6,8 @@ A simple program that fetches the data from [airdates.tv](http://airdates.tv), p
 
 ### Installation
 
+You need Elixir installed to run this one (duh!). [Follow this link](https://elixir-lang.org/install.html) to do so if you haven't already.
+
 - Clone this repository
 - `mix run --no-halt`
 - Go to `http://localhost:4001/`

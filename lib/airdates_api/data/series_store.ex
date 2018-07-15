@@ -73,8 +73,7 @@ defmodule AirdatesApi.SeriesStore do
      state
      |> Enum.filter(fn %{id: id_} ->
        id_ == id
-     end)
-     |> hd(), state}
+     end), state}
   end
 
   @impl true

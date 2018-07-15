@@ -1,11 +1,19 @@
 defmodule AirdatesApi.Parser do
-  @type show_line :: [id: binary(), date: binary(), slug: binary(), title: binary()]
+  @type show_line :: %{
+          id: binary(),
+          series_id: binary(),
+          date: binary(),
+          slug: binary(),
+          title: binary()
+        }
 
   @doc """
   Fetch data from website and parses it.
   """
   @spec parse() :: [show_line]
   def parse do
+    IO.puts("Airdates Parsed")
+
     AirdatesApi.Client.get_airdates()
     |> Floki.parse()
     |> Floki.find(".day")
@@ -18,7 +26,7 @@ defmodule AirdatesApi.Parser do
     |> Enum.map(fn
       {_, [{_, "entry"}, {"data-series-id", series_id}, {"data-series-source", slug}],
        [{_, [{_, "title"}], [title]}]} ->
-        dispatch(date, series_id, slug, title)
+        dispatch(date, UUID.uuid4(), series_id, slug, title)
 
       _ ->
         nil
@@ -26,9 +34,8 @@ defmodule AirdatesApi.Parser do
     |> Enum.filter(& &1)
   end
 
-  @spec dispatch(binary(), binary(), binary(), binary()) :: show_line
-  defp dispatch(date, id, slug, title) do
-    # # TODO Send this to the GenServer Store
-    [id: id, date: date, slug: slug, title: title]
+  @spec dispatch(binary(), binary(), binary(), binary(), binary()) :: show_line
+  defp dispatch(date, id, series_id, slug, title) do
+    %{id: id, series_id: series_id, date: date, slug: slug, title: title}
   end
 end

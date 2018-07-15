@@ -14,7 +14,7 @@ A simple program that fetches the data from [airdates.tv](http://airdates.tv), p
 
 ### Query examples
 
-![Playground Screenshot](https://imgur.com/MlpgPcY)
+![Playground Screenshot](https://i.imgur.com/MlpgPcY.png)
 
 To list all shows:
 
